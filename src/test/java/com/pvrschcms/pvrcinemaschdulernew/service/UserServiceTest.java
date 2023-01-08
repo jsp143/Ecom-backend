@@ -72,6 +72,7 @@ class UserServiceTest {
         rolenew.add(roleRepository.findByName(Constant.RoleName.ROLE_USER.toString()));
         userModel.setRoles(rolenew);
         when(userRepository.save(userModel)).thenReturn(userModel);
+        assertEquals(userModel.getEmailId(),userService.createCustomer(request).getEmailId());
         //assertEquals(userModel,userService.createCustomer(request));
     }
 
