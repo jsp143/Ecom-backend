@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+ <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+ <html lang="en">
+    <head>
+    	<title>Admin Dashboard</title>
+    	<div th:replace="fragments/admin-header :: admin-header-css"/>
+    </head>
+    <body>
+    	<!-- Main Wrapper -->
+        <div class="main-wrapper">
+			<div th:replace="fragments/admin-header :: admin-header"/>
+			<div th:replace="fragments/admin-header :: admin-sidebar"/>
+			<!-- Page Content --><!-- Page Wrapper -->
+            <div class="page-wrapper">
+				<!-- Page Content -->
+                <div class="content container-fluid">
+					<!-- Page Header -->
+					<div class="page-header">
+						<div class="row align-items-center">
+							<div class="col">
+								<h3 class="page-title">Sub Department</h3>
+								<ul class="breadcrumb">
+									<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+									<li class="breadcrumb-item active">Sub Department</li>
+								</ul>
+							</div>
+							<div class="col-auto float-right ml-auto">
+								<a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_sub_department"><i class="fa fa-plus"></i> Add Sub Department</a>
+							</div>
+						</div>
+					</div>
+					<!-- /Page Header -->
+					
+					<div class="row">
+						<div class="col-md-12">
+							<div>
+								<table class="table table-striped custom-table mb-0 datatable">
+									<thead>
+										<tr>
+											<th style="width: 30px;">#</th>
+											<th>Sub Department Name</th>
+											<th>Sub Department Code</th>
+											<th>Department Name</th>
+											<th>Image</th>
+											<th class="text-right">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="subdept : ${listSubDept}">
+											<td>1</td>
+											<td th:text="${subdept.name}"></td>
+											<td th:text="${subdept.code}"></td>
+											<td th:text="${subdept.deptName}"></td>
+											<td><img th:src="@{${'/web/file/get/' + subdept.fileName}}" width="120"/></td>
+											<td class="text-right">
+                                            <div class="dropdown dropdown-action">
+												<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-list-ul" aria-hidden="true"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <button class="dropdown-item" th:onclick="javascript:getddd(this.getAttribute('data-extra-val'));" data-toggle="modal" th:data-extra-val="${subdept.id} + '^' + ${subdept.name} + '^' + ${subdept.code} + '^' + ${subdept.fileName} + '^' + ${subdept.uploadDir}"  id="edit_sub_dept_button" ><i class="fa fa-pencil m-r-5"></i> Edit</button>
+                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                </div>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+                </div>
+				<!-- /Page Content -->
+				
+				<!-- Add Department Modal -->
+				<div id="add_sub_department" class="modal custom-modal fade" role="dialog">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Add Sub Department</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form th:action="@{/web/subdept/save}" method="post"  enctype="multipart/form-data">
+									<div class="form-group">
+										<label>Department Name <span class="text-danger">*</span></label>
+										<select th:name="department" id="department" class="select-class" required="required">
+											<option value="">Select Department</option>
+									        <option th:each="dept : ${listDept}"
+									                th:value="${dept.id}"
+									                th:text="${dept.name}+' : '+${dept.code}"></option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label>Department Name <span class="text-danger">*</span></label>
+										<input class="form-control" type="text"  th:name="deptName" id="deptName" placeholder="Department Name"/>
+									</div>
+									<div class="form-group">
+										<label>Department Code <span class="text-danger">*</span></label>
+										<input class="form-control" type="text"  th:name="deptCode" id="deptCode" placeholder="Department Code"/>
+									</div>
+									<div class="form-group">
+										<label>Department Image<span class="text-danger">*</span></label>
+										<input class="form-control" type="file"  th:name="file" id="file"/>
+									</div>
+									<div class="submit-section">
+										<button class="btn btn-primary submit-btn" type="submit">Submit</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Add Department Modal -->
+				
+				<!-- Edit Department Modal -->
+				<div id="edit_department" class="modal custom-modal fade" role="dialog">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Edit Department</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form th:action="@{/web/department/update}" method="post"  enctype="multipart/form-data">
+									<input type="hidden" th:name="deptIdEdit" id="deptIdEdit"/>
+									<div class="form-group">
+										<label>Department Name <span class="text-danger">*</span></label>
+										<input class="form-control" type="text"  th:name="deptNameEdit"  id="deptNameEdit" placeholder="Department Name"/>
+									</div>
+									<div class="form-group">
+										<label>Department Code <span class="text-danger">*</span></label>
+										<input class="form-control" type="text"  th:name="deptCodeEdit" id="deptCodeEdit" placeholder="Department Code"/>
+									</div>
+									<div class="form-group">
+										<label>Department Image<span class="text-danger">*</span></label>
+										<input class="form-control" type="file"  th:name="fileEdit" id="fileEdit"/>
+										<!-- <img width="1000" th:src="@{upload/pirate.jpg}"/> -->
+										<!-- <input type="hidden" th:name="deptImageNameEdit" id="deptImageNameEdit"/> -->
+									</div>
+									<div class="show-image-edit">
+									</div>
+									<div class="submit-section">
+										<button class="btn btn-primary submit-btn" type="submit">Submit</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Edit Department Modal -->
+
+				<!-- Delete Department Modal -->
+				<div class="modal custom-modal fade" id="delete_department" role="dialog">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-body">
+								<div class="form-header">
+									<h3>Delete Department</h3>
+									<p>Are you sure want to delete?</p>
+								</div>
+								<div class="modal-btn delete-action">
+									<div class="row">
+										<div class="col-6">
+											<a href="javascript:void(0);" class="btn btn-primary continue-btn">Delete</a>
+										</div>
+										<div class="col-6">
+											<a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Delete Department Modal -->
+				
+            </div>
+			<!-- /Page Wrapper -->
+			<!-- Page Content -->
+		</div>
+		<div th:replace="fragments/admin-footer :: admin-footer-js"></div>
+    </body>
+</html>
+<script>
+$('.select-class').select2();
+function getEditData(a){
+	//alert(a);
+	//alert($(this).data('extra-val'));
+	var res = a.split('^');
+	$("#deptIdEdit").val(res[0]);
+	$("#deptNameEdit").val(res[1]);
+	$("#deptCodeEdit").val(res[2]);
+	$("#deptImageNameEdit").val(res[3]);
+	$('.show-image-edit').html("");
+	console.log(res[3]);
+	var base_url = window.location.origin;
+	var images_div = "<img src=\""+base_url+"/web/file/get/"+res[3]+ "\" height=\"160px\" width=\"200px\" id=\"old_image_div\" />";
+    $('.show-image-edit').append(images_div);
+	$('#edit_department').modal('show');
+}
+$("#edit_department_button").click(function(){
+	console.log("dsksdfkjsdfn");
+});
+</script>

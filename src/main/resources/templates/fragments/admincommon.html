@@ -1,0 +1,33 @@
+<html>
+	<body>
+		<div th:fragment="adminloginheader">
+			<meta charset="utf-8">
+			<!-- Favicon -->
+			
+	        <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/img/favicon.png}">
+			
+			<!-- Bootstrap CSS -->
+			<link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+			
+			<!-- Fontawesome CSS -->
+	        <link rel="stylesheet" th:href="@{/assets/css/font-awesome.min.css}">
+			
+			<!-- Main CSS -->
+	        <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		</div>
+		
+		<div id="footer" th:fragment="adminloginfooter">
+			<!-- jQuery -->
+	        <script th:src="@{/assets/js/jquery-3.2.1.min.js}"></script>
+	        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script> -->
+	        <!-- Bootstrap Core JS -->
+	        <script th:src="@{/assets/js/popper.min.js}"></script>
+	        <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+			
+			<!-- Custom JS -->
+			<script th:src="@{/assets/js/app.js}"></script>
+		</div>
+		
+	</body>
+</html>
