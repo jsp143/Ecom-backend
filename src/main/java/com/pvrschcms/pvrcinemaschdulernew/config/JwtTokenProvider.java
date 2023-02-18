@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.pvrschcms.pvrcinemaschdulernew.model.user.UserPrincipal;
+import com.pvrschcms.pvrcinemaschdulernew.user.model.UserPrincipal;
 
 import java.util.Date;
 

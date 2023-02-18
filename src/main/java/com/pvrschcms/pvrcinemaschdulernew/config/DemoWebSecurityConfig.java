@@ -16,8 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.pvrschcms.pvrcinemaschdulernew.exception.CustomAuthFailureResponse;
-import com.pvrschcms.pvrcinemaschdulernew.service.MyUserDetailsService;
+import com.pvrschcms.pvrcinemaschdulernew.utils.exception.CustomAuthFailureResponse;
+import com.pvrschcms.pvrcinemaschdulernew.user.service.MyUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
