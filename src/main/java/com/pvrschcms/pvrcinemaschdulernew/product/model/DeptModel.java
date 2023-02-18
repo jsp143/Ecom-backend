@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pvrschcms.pvrcinemaschdulernew.audit.DateAuditView;
+import com.pvrschcms.pvrcinemaschdulernew.utils.audit.DateAuditView;
 
 import lombok.Getter;
 import lombok.Setter;

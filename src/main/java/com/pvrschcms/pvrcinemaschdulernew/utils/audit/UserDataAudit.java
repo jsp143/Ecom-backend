@@ -1,4 +1,4 @@
-package com.pvrschcms.pvrcinemaschdulernew.audit;
+package com.pvrschcms.pvrcinemaschdulernew.utils.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

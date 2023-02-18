@@ -1,4 +1,4 @@
-package com.pvrschcms.pvrcinemaschdulernew.audit;
+package com.pvrschcms.pvrcinemaschdulernew.utils.audit;
 
 import java.io.Serializable;
 import java.util.Date;

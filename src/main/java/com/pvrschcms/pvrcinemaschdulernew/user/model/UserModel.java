@@ -13,9 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.pvrschcms.pvrcinemaschdulernew.audit.DateAudit;
+import com.pvrschcms.pvrcinemaschdulernew.utils.audit.DateAudit;
 
-import com.pvrschcms.pvrcinemaschdulernew.user.model.RoleModel;
 import lombok.Getter;
 import lombok.Setter;
 
