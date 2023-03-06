@@ -2,12 +2,12 @@ package com.pvrschcms.pvrcinemaschdulernew.user.controller;
 
 import com.google.gson.Gson;
 import com.pvrschcms.pvrcinemaschdulernew.user.model.request.SignUpRequest;
-import com.pvrschcms.pvrcinemaschdulernew.user.model.response.UserResponse;
+import com.pvrschcms.pvrcinemaschdulernew.utils.constant.Utility;
+import com.pvrschcms.pvrcinemaschdulernew.utils.constant.ValidationUtils;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import org.springframework.beans.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.pvrschcms.pvrcinemaschdulernew.config.JwtTokenProvider;
@@ -16,133 +16,56 @@ import com.pvrschcms.pvrcinemaschdulernew.utils.constant.ResponseDto;
 import com.pvrschcms.pvrcinemaschdulernew.user.model.UserModel;
 import com.pvrschcms.pvrcinemaschdulernew.user.service.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SuppressWarnings("rawtypes")
 @RestController
 @RequestMapping("/api/web/user/")
 public class UserController {
-	
+	Logger logger = LoggerFactory.getLogger("ws");
 	@Autowired
 	private UserService usrservice;
-	
+	@Autowired
+	private ValidationUtils validationUtils;
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
+	@Autowired
+	private Utility utility;
 
 	@PostMapping(value = "signup/customer")
 	public ResponseDto signUpCustomer(@RequestBody SignUpRequest request) {
 		ResponseDto resp = new ResponseDto();
 		try {
-			UserModel userModel = usrservice.createCustomer(request);
-			if(userModel!=null){
-				resp.setSuccess(true);
-				resp.setCode(Constant.RESP_ALERT_DIALOG);
-				resp.setMessage(Constant.Message.USER_CREATED_SUCCESSFULY);
+			if(validationUtils.validateUserRequest(request)) {
+				request.setType(Constant.TypeUser.TYPE_COUSTOMER.toString());
+				request.setRoleName(Constant.RoleName.ROLE_USER.toString());
+				request.setRoles(Constant.RoleName.ROLE_USER.toString());
+				UserModel userModel = usrservice.createCustomer(request);
+				if (userModel != null) {
+					resp.setSuccess(true);
+					resp.setCode(Constant.RESP_ALERT_DIALOG);
+					resp.setMessage(Constant.Message.USER_CREATED_SUCCESSFULY);
+				} else {
+					logger.debug("CREATE USER PROCESS :: ERROR ");
+					resp.setSuccess(false);
+					resp.setMessage(Constant.Message.ERROR);
+					resp.setCode(Constant.RESP_ALERT_DIALOG);
+				}
 			}else{
+				logger.debug("CREATE USER PROCESS :: USER_CREATE_REQUEST_INVALID ");
 				resp.setSuccess(false);
-				resp.setMessage(Constant.Message.ERROR);
+				resp.setMessage(Constant.Message.USER_CREATE_REQUEST_INVALID);
 				resp.setCode(Constant.RESP_ALERT_DIALOG);
 			}
 			return resp;
 		}catch (Exception e) {
-			e.printStackTrace();
+			logger.error("CREATE USER PROCESS :: EXCEPTION {}", utility.error(e));
 			resp.setSuccess(false);
 			resp.setCode(Constant.RESP_ALERT_ERROR);
-			resp.setMessage(e.getMessage());
+			resp.setMessage(Constant.Message.ERROR);
 			return resp;
 		}
 
 	}
 
-	//@PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR')")
-	@PostMapping(value = "create/user")
-	public ResponseDto signUpUser(@RequestBody SignUpRequest request) {
-		ResponseDto resp = new ResponseDto();
-		try {
-			UserModel userModel = usrservice.createCustomer(request);
-			if(userModel!=null){
-				resp.setSuccess(true);
-				resp.setCode(Constant.RESP_ALERT_DIALOG);
-				resp.setMessage(Constant.Message.USER_CREATED_SUCCESSFULY);
-			}else{
-				resp.setSuccess(false);
-				resp.setMessage(Constant.Message.ERROR);
-				resp.setCode(Constant.RESP_ALERT_DIALOG);
-			}
-			return resp;
-		}catch (Exception e) {
-			e.printStackTrace();
-			resp.setSuccess(false);
-			resp.setCode(Constant.RESP_ALERT_ERROR);
-			resp.setMessage(e.getMessage());
-			return resp;
-		}
-	}
 
-	@PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR') or hasRole('ROLE_ADMIN')")
-	@GetMapping(value = "customer/list")
-	public ResponseDto getAllCoustomer() {
-		ResponseDto resp = new ResponseDto();
-		try {
-			List<UserModel> userlist = usrservice.findAllCoustomer();
-			System.out.println(" user list :: "+new Gson().toJson(userlist).toString());
-			resp.setCode(Constant.RESP_SUCCESS);
-			resp.setMessage(Constant.Message.SUCCESS);
-			resp.setSuccess(true);
-			List<UserResponse> userResponses = new ArrayList<>();
-			BeanUtils.copyProperties(userlist, userResponses);
-			resp.setData(userResponses);
-		}catch (Exception e) {
-			e.printStackTrace();
-			resp.setCode(Constant.RESP_ALERT_ERROR);
-			resp.setMessage(Constant.Message.ERROR);
-			resp.setSuccess(false);
-		}
-		return resp;
-	}
-
-	@PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-	@PostMapping(value = "my/detail")
-	public ResponseDto getmyDetail(Authentication authentication) {
-		String tkn = jwtTokenProvider.generateToken(authentication);
-		ResponseDto resp = new ResponseDto();
-		try {
-			UserModel user = usrservice.findmyDetail(tkn);
-			resp.setCode(Constant.RESP_SUCCESS);
-			resp.setMessage(Constant.Message.SUCCESS);
-			resp.setSuccess(true);
-			UserResponse userResponse = new UserResponse();
-			BeanUtils.copyProperties(user, userResponse);
-			resp.setData(userResponse);
-		} catch (Exception e) {
-			e.printStackTrace();
-			resp.setCode(Constant.RESP_ALERT_ERROR);
-			resp.setMessage(Constant.Message.ERROR);
-			resp.setSuccess(false);
-		}
-		return resp;
-	}
-	
-	@PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR') or hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "user/detail")
-	public ResponseDto getUserDetail(@RequestParam String id) {
-		ResponseDto resp = new ResponseDto();
-		try {
-			UserModel user = usrservice.findUserDetail(id);
-			resp.setCode(Constant.RESP_SUCCESS);
-			resp.setMessage(Constant.Message.SUCCESS);
-			resp.setSuccess(true);
-			UserResponse userResponse = new UserResponse();
-			BeanUtils.copyProperties(user, userResponse);
-			resp.setData(userResponse);
-		} catch (Exception e) {
-			e.printStackTrace();
-			resp.setCode(Constant.RESP_ALERT_ERROR);
-			resp.setMessage(Constant.Message.ERROR);
-			resp.setSuccess(false);
-		}
-		return resp;
-	}
 
 }

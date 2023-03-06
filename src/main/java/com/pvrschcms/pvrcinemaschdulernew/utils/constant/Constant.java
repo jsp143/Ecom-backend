@@ -20,8 +20,17 @@ public class Constant {
 	public static final Integer RESP_ALERT_PAGE_NOT_FOUND = 10012;
 	public static final Integer RESP_ALERT_ACCESS_DENIED = 10013;
 	public static final Integer RESP_ALERT_UNAUTHORIZED = 10014;
+	public static class ATTRIBUTE {
+		public static final String REDIRECT_FLASH_ERROR = "error";
+		public static final String REDIRECT_FLASH_RESP = "added";
+		public static final String USER_RESPONSE = "userResponse";
+	}
+	public static class Redirect {
+		public static final String LOGIN_PAGE = "redirect:/web/admin/login";
+		public static final String DASHBOARD = "redirect:admin-dashboard";
+		public static final String USER_LIST = "user-list";
 
-
+	}
 	public enum platform {
 		WEBSITE, ANDROID, IOS
 	}
@@ -49,12 +58,16 @@ public class Constant {
 
     public static final String UTC_TIMEZONE = "UTC";
     
-    public static class Message {
+
+
+	public static class Message {
 		public static final String ERROR = "Something Went Wrong!";
 		public static final String SUCCESS = "Success";
 		public static final String USER_CREATED_SUCCESSFULY = "User Created Successfully!";
 		public static final String USER_NAME_IS_ALREADY_USED = "Oops! Username is already used!";
 		public static final String USER_LOGIN_SUCCESS = "User Login Success";
+
+		public static final String USER_CREATE_REQUEST_INVALID = "Invalid Request!";
 	}
     
     public static class PAYMENTMODES {

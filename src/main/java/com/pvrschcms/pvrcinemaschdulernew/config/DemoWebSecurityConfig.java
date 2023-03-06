@@ -60,15 +60,15 @@ public class DemoWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	    }
 	    
 	    private static final String[] SPECIAL_WHITELIST = {
-	            "/api/web/dept/spc/list",
-	            "/swagger/ui/**"
+	            "/swagger/ui/**",
+				"/v2/api-docs",
+				"/swagger-resources/**",
+				"/swagger/ui/**",
+				"/swagger-ui.html",
+				"/swagger-ui/"
 	    };
 	    
 	    private static final String[] AUTH_WHITELIST = {
-	            "/swagger-resources/**",
-	            "/swagger/ui/**",
-	            "/swagger-ui.html",
-	            "/v2/api-docs",
 	            "/webjars/**",
 	            "/assets/**",
 	            "/api/web/auth/signin",

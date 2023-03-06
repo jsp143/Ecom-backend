@@ -19,11 +19,10 @@ import com.pvrschcms.pvrcinemaschdulernew.utils.constant.ResponseDto;
 import com.pvrschcms.pvrcinemaschdulernew.product.model.DeptModel;
 import com.pvrschcms.pvrcinemaschdulernew.product.service.PvrDeptService;
 
-@SuppressWarnings("rawtypes")
 @RestController
 @RequestMapping("/api/web/dept/")
 public class PvrDeptController {
-	private static final Logger logger = LoggerFactory.getLogger(PvrDeptController.class);
+	Logger logger = LoggerFactory.getLogger("ws");
 	
 	@Autowired
 	private PvrDeptService deptService;
@@ -32,7 +31,7 @@ public class PvrDeptController {
 	public ResponseEntity<ResponseDto<DeptModel,ErrorResponse>> createDepartment(@RequestParam String departmentName,
 			@RequestParam(required = false, defaultValue = "") String code
 			,@RequestParam("files") MultipartFile[] files) {
-		logger.debug(this.getClass().getName()+".createDepartment() departmentName :: "+departmentName+" :: code :: "+code);
+		logger.debug("DEPARTMENT CREATE .createDepartment() departmentName :: "+departmentName+" :: code :: "+code);
 		ResponseDto resp = new ResponseDto();
 		ResponseEntity<ResponseDto<DeptModel,ErrorResponse>> response = null;
 		try {
@@ -43,7 +42,7 @@ public class PvrDeptController {
 			resp.setData(dpt);
 			response = new ResponseEntity<>(resp, HttpStatus.OK);
 		}catch (Exception e) {
-			logger.debug(this.getClass().getName()+".createDepartment() departmentName :: "+departmentName+" :: code :: "+code+" exc :: "+e.getMessage());
+			logger.debug("DEPARTMENT CREATE  .createDepartment() departmentName :: "+departmentName+" :: code :: "+code+" exc :: "+e.getMessage());
 			resp.setSuccess(false);
 			resp.setCode(Constant.RESP_ALERT_ERROR);
 			resp.setMessage(Constant.Message.ERROR);
@@ -97,6 +96,7 @@ public class PvrDeptController {
 	
 	@RequestMapping(value = "list")
 	public ResponseDto getDeptList() {
+		logger.debug("DEPARTMENT LIST  .getDeptList() departmentLIST :: ");
 		ResponseDto resp = new ResponseDto();
 		try {
 			List<DeptModel> dpt = deptService.getDeptList();
@@ -105,6 +105,7 @@ public class PvrDeptController {
 			resp.setSuccess(true);
 			resp.setData(dpt);
 		} catch (Exception e) {
+			logger.debug("DEPARTMENT LIST EXCP .getDeptList() departmentName :: "+e.getMessage());
 			e.printStackTrace();
 			resp.setCode(Constant.RESP_ALERT_ERROR);
 			resp.setMessage(Constant.Message.ERROR);

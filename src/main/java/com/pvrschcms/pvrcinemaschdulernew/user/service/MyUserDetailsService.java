@@ -2,6 +2,9 @@ package com.pvrschcms.pvrcinemaschdulernew.user.service;
 
 import javax.transaction.Transactional;
 
+import com.pvrschcms.pvrcinemaschdulernew.user.model.request.LoginRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +31,7 @@ import com.pvrschcms.pvrcinemaschdulernew.user.repository.UserRepository;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
+	Logger logger = LoggerFactory.getLogger("ws");
 	@Autowired
     AuthenticationManager authenticationManager;
 
@@ -79,7 +83,7 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
 	@SuppressWarnings("rawtypes")
-	public ResponseDto authenticateUser(User loginRequest) {
+	public ResponseDto authenticateUser(LoginRequest loginRequest) {
 		ResponseDto response = new ResponseDto();
 		try {
 			Authentication authentication = authenticationManager.authenticate(
@@ -108,6 +112,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	
 	@SuppressWarnings("rawtypes")
 	public LoginResponse authenticateUserWeb(String username, String password) {
+		logger.debug("LOGIN PROCCESS authenticateUserWeb username:: "+username+" :: password :: "+password);
 		LoginResponse ls = null;
 		try {
 			Authentication authentication = authenticationManager.authenticate(
@@ -119,7 +124,9 @@ public class MyUserDetailsService implements UserDetailsService {
 			
 	        //SecurityContextHolder.getContext().setAuthentication(authentication);
 	        String jwt = tokenProvider.generateToken(authentication);
+			logger.debug("LOGIN PROCCESS authenticateUserWeb jwt:: "+jwt);
 	        UserModel um = userModelRepository.findById(jwtTokenProvider.getUserIdFromJWT(jwt));
+			logger.debug("LOGIN PROCCESS authenticateUserWeb getName:: "+um.getName());
 	        ls = new LoginResponse(jwt,um.getName(),um.getUsername(),um.getEmailId(),um.getMobile());
 	        UsernamePasswordAuthenticationToken authentication1 =new UsernamePasswordAuthenticationToken(um, null, authentication.getAuthorities());
 	        SecurityContextHolder.getContext().setAuthentication(authentication1);

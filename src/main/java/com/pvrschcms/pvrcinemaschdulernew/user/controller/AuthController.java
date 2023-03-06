@@ -1,6 +1,7 @@
 package com.pvrschcms.pvrcinemaschdulernew.user.controller;
 
 
+import com.pvrschcms.pvrcinemaschdulernew.user.model.request.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,7 @@ public class AuthController {
 
     @SuppressWarnings("rawtypes")
 	@PostMapping("signin")
-    public ResponseDto authenticateUser(@Validated @RequestBody User loginRequest) {
+    public ResponseDto authenticateUser(@Validated @RequestBody LoginRequest loginRequest) {
         return userService.authenticateUser(loginRequest);
     }
     

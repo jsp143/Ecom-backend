@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
@@ -37,6 +36,15 @@ public class Utility {
 //        }
 //        return null;
 //    }
+	public String error(Exception e) {
+		final StringBuffer bf = new StringBuffer();
+		bf.append(e.toString());
+		for (int i = 0; i < e.getStackTrace().length; i++) {
+			bf.append("\n").append(e.getStackTrace()[i].toString());
+		}
+		bf.append("\n").append(new Date());
+		return ":: ERROR::" + bf.toString();
+	}
 	public static boolean comparePassword(String requestedPassword, String originalPassword) {
 		return BCrypt.checkpw(requestedPassword, originalPassword);
 	}
@@ -306,5 +314,6 @@ public class Utility {
         String timeStamp = new SimpleDateFormat("ddMMYYYYHHMMSS").format(Calendar.getInstance().getTime());
         return timeStamp;
     }
+
 
 }

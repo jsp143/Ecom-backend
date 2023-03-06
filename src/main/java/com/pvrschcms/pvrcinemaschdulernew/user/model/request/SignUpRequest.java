@@ -17,6 +17,9 @@ public class SignUpRequest {
     private String panNo = "";
     private String gender = "";
     private String aadharNo = "";
+
+    private String roleName="";
+    private String type="";
     private String roles;
 
     public SignUpRequest() {

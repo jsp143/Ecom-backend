@@ -3,13 +3,17 @@ package com.pvrschcms.pvrcinemaschdulernew.user.controller.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pvrschcms.pvrcinemaschdulernew.user.model.request.LoginRequest;
+import com.pvrschcms.pvrcinemaschdulernew.utils.constant.Constant;
+import com.pvrschcms.pvrcinemaschdulernew.utils.constant.ValidationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,48 +26,47 @@ import com.pvrschcms.pvrcinemaschdulernew.user.service.MyUserDetailsService;
 @Controller
 @RequestMapping("/web/admin/")
 public class LoginWebController {
+	Logger logger = LoggerFactory.getLogger("ws");
 	@Autowired
     private MyUserDetailsService userService;
-	
-	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-	
+
+	@Autowired
+	private ValidationUtils validationUtils;
+
 	@RequestMapping("login")
 	public String loginPage(Model model) {
 	    return "admin-login";
 	}
 	
 	@RequestMapping("login/dashboard")
-	public ModelAndView loginRequest(HttpServletRequest request,HttpServletResponse response ,@RequestParam String username,@RequestParam String password,Model model) {
+	public ModelAndView loginRequest(HttpServletRequest request, HttpServletResponse response , @RequestBody LoginRequest loginRequest, Model model) {
+		logger.debug("LOGIN PROCCESS {} password {}",loginRequest.getUsername(),loginRequest.getPassword());
 		ModelAndView andView =  new ModelAndView();
 		try {
-			if(!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)) {
-				LoginResponse resp = userService.authenticateUserWeb(username,password);
+			if(validationUtils.validateLoginRequest(loginRequest)) {
+				LoginResponse resp = userService.authenticateUserWeb(loginRequest.getUsername(),loginRequest.getPassword());
 				Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				UserModel userDetails = null;
 				userDetails = (UserModel) principal;
-				System.out.println(userDetails.getUsername());
-				//System.out.println(resp.getAccessToken()+" :: type :: "+resp.getTokenType());
+				logger.debug("LOGIN PROCCESS getUsername :: {}  getAccessToken :: {} :: type :: {} ",userDetails.getUsername(),resp.getAccessToken(),resp.getTokenType());
+
 				if(response!=null) {
-					//model.addAttribute("loginResponse", resp);
-				    //return "redirect:/web/admin/dashboard";
-					//redirectStrategy.sendRedirect(request, response, "/web/admin/dashboard");
-				    //response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/web/admin/dashboard"));
-					
+					logger.debug("LOGIN PROCCESS getUsername if cond :: {} ",userDetails.getUsername());
 					andView.addObject("userDetails", userDetails);
 					andView.setViewName("admin-dashboard");
 					return andView;
 				}else {
-					//redirectStrategy.sendRedirect(request, response,"/web/admin/login");
-					andView.setViewName("redirect:/web/admin/login");
+					logger.debug("LOGIN PROCCESS getUsername else cond :: {} ",userDetails.getUsername());
+					andView.setViewName(Constant.Redirect.LOGIN_PAGE);
 					return andView;
 				}
 			}else {
-				andView.setViewName("redirect:/web/admin/login");
+				andView.setViewName(Constant.Redirect.LOGIN_PAGE);
 				return andView;
 			}
 		}catch (Exception e) {
-			System.out.println(" excption loginRequest() "+e.getMessage());
-			andView.setViewName("redirect:/web/admin/login");
+			logger.debug("LOGIN PROCCESS excption loginRequest() {}",e.getMessage());
+			andView.setViewName(Constant.Redirect.LOGIN_PAGE);
 			return andView;
 		}
 	}
