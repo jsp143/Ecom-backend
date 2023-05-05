@@ -27,8 +27,9 @@ public class Constant {
 	}
 	public static class Redirect {
 		public static final String LOGIN_PAGE = "redirect:/web/admin/login";
-		public static final String DASHBOARD = "redirect:admin-dashboard";
-		public static final String USER_LIST = "user-list";
+		public static final String DASHBOARD = "redirect:/web/admin/dashboard";
+		public static final String USER_LIST = "redirect:/web/admin/user/customer/list";
+
 
 	}
 	public enum platform {

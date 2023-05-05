@@ -65,15 +65,19 @@ public class DemoWebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/swagger-resources/**",
 				"/swagger/ui/**",
 				"/swagger-ui.html",
-				"/swagger-ui/"
+				"/swagger-ui/",
+				"/api/web/user/create/user",
+				"/api/web/user/signup/customer",
+
 	    };
 	    
 	    private static final String[] AUTH_WHITELIST = {
 	            "/webjars/**",
 	            "/assets/**",
 	            "/api/web/auth/signin",
-	            "/web/admin/login/**",
-	            "/web/**"
+	            "/web/admin/login",
+				"/web/admin/authenticate",
+				"/web/admin/dashboard"
 	    };
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
@@ -97,10 +101,6 @@ public class DemoWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	                    	.permitAll()
 	                    .antMatchers("/web/admin/**")
 	                    	.hasAnyRole("ROLE_ADMINISTRATOR","ROLE_ADMIN")
-	                    .antMatchers("/api/web/user/create/user","/api/web/user/signup/customer","/api/web/department/create","/api/web/department/detail","/api/web/department/dept/list","/web/department/list")
-	                        .permitAll()
-	                    .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
-	                    	.permitAll()
 	                    .anyRequest()
 	                        .authenticated();
 	        

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.google.gson.Gson;
 import com.pvrschcms.pvrcinemaschdulernew.utils.constant.Utility;
 import com.pvrschcms.pvrcinemaschdulernew.utils.mapper.UserMapper;
 import com.pvrschcms.pvrcinemaschdulernew.user.model.request.SignUpRequest;

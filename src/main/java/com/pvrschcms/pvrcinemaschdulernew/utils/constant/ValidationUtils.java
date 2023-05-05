@@ -24,4 +24,13 @@ public class ValidationUtils {
             res = false;
         return res;
     }
+
+    public boolean validateWebLoginRequest(String username, String password) {
+        boolean res;
+        if(!username.isEmpty() && !password.isEmpty())
+            res = true;
+        else
+            res = false;
+        return res;
+    }
 }

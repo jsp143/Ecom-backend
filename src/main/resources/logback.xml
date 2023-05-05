@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="LOGS" value="D:/app_logs/ecom" />
+    <property name="LOGS" value="D:/logger/ecom" />
     <appender name="WS-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS}/ws/ws.log</file>
         <append>true</append>

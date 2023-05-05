@@ -112,7 +112,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	
 	@SuppressWarnings("rawtypes")
 	public LoginResponse authenticateUserWeb(String username, String password) {
-		logger.debug("LOGIN PROCCESS authenticateUserWeb username:: "+username+" :: password :: "+password);
+		logger.debug("LOGIN PROCCESS authenticateUserWeb username:: {} :: password :: {}",username,password);
 		LoginResponse ls = null;
 		try {
 			Authentication authentication = authenticationManager.authenticate(
@@ -121,17 +121,16 @@ public class MyUserDetailsService implements UserDetailsService {
 	                		password
 	                )
 	        );
-			
 	        //SecurityContextHolder.getContext().setAuthentication(authentication);
 	        String jwt = tokenProvider.generateToken(authentication);
-			logger.debug("LOGIN PROCCESS authenticateUserWeb jwt:: "+jwt);
+			logger.debug("LOGIN PROCCESS authenticateUserWeb jwt:: {} ",jwt);
 	        UserModel um = userModelRepository.findById(jwtTokenProvider.getUserIdFromJWT(jwt));
-			logger.debug("LOGIN PROCCESS authenticateUserWeb getName:: "+um.getName());
+			logger.debug("LOGIN PROCCESS authenticateUserWeb getName:: {}",um.getName());
 	        ls = new LoginResponse(jwt,um.getName(),um.getUsername(),um.getEmailId(),um.getMobile());
 	        UsernamePasswordAuthenticationToken authentication1 =new UsernamePasswordAuthenticationToken(um, null, authentication.getAuthorities());
 	        SecurityContextHolder.getContext().setAuthentication(authentication1);
 		}catch (Exception e) {
-			e.printStackTrace();
+			logger.debug("LOGIN PROCCESS authenticateUserWeb jwt exception :: {} ",username);
 		}
 		return ls;
 	}

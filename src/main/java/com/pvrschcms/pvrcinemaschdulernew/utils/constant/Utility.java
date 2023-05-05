@@ -6,7 +6,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import com.pvrschcms.pvrcinemaschdulernew.user.model.UserModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class Utility {
+	Logger logger = LoggerFactory.getLogger("ws");
 	@Autowired
     private ObjectMapper objectMapper;
 
@@ -316,4 +322,8 @@ public class Utility {
     }
 
 
+    public UserModel getPrinciple(SecurityContext context) {
+		Object principal =  context.getAuthentication().getPrincipal();
+		return (UserModel)principal;
+    }
 }

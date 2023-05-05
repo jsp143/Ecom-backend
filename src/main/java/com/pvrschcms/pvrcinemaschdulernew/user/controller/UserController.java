@@ -1,6 +1,5 @@
 package com.pvrschcms.pvrcinemaschdulernew.user.controller;
 
-import com.google.gson.Gson;
 import com.pvrschcms.pvrcinemaschdulernew.user.model.request.SignUpRequest;
 import com.pvrschcms.pvrcinemaschdulernew.utils.constant.Utility;
 import com.pvrschcms.pvrcinemaschdulernew.utils.constant.ValidationUtils;
@@ -30,8 +29,9 @@ public class UserController {
 	@Autowired
 	private Utility utility;
 
-	@PostMapping(value = "signup/customer")
+	@PostMapping(value = "signup")
 	public ResponseDto signUpCustomer(@RequestBody SignUpRequest request) {
+		logger.debug("CREATE USER PROCESS :: ");
 		ResponseDto resp = new ResponseDto();
 		try {
 			if(validationUtils.validateUserRequest(request)) {
